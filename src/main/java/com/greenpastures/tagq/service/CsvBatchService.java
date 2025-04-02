@@ -146,7 +146,6 @@ public class CsvBatchService {
                     log.info("API 요청 성공! 응답 코드: {}", response.getStatusCode());
                     log.info("응답 본문: {}", response.getBody());
                     int addedCount = extractAddedCount(response.getBody());
-//                    successCount += addedCount;
                     log.info("추출된 추가된 개수: {}", addedCount); // 확인용 로그 추가
                     if (addedCount > 0) {
                         successCount += addedCount;

@@ -55,7 +55,6 @@ public class QuestionService {
             tagEntity.getQuestions().add(questionEntity);
         }
 
-        // 질문 저장
         QuestionEntity savedQuestion = questionRepository.save(questionEntity);
         return QuestionMapper.INSTANCE.questionEntityToQuestionDTO(savedQuestion);
     }
@@ -103,7 +102,7 @@ public class QuestionService {
         return questionDTOs;
     }
 
-    //    질문 단건 조회
+    //질문 단건 조회
     public QuestionDTO getQuestionById(int questionId) {
         QuestionEntity existingQuestion = questionRepository.findById(questionId)
                 .orElseThrow(() -> new NotAcceptException("Question Id doesn't exist"));
@@ -133,66 +132,4 @@ public class QuestionService {
         questionRepository.deleteAll();
         return "All questions are deleted.";
     }
-
-
-    //////////////////질문 여러개 한꺼번에 등록
-//    @Transactional
-//    public String createQuestions(List<QuestionBody> questionBodies) {
-//        StringBuilder result = new StringBuilder();
-//
-//        for (QuestionBody questionBody : questionBodies) {
-//            QuestionEntity questionEntity = QuestionMapper.INSTANCE.idAndQuestionBodyToQuestionEntity(null, questionBody);
-//
-//            // 질문에서 키워드를 뽑아 카테고리 결정
-//            String category = categoryService.determineCategory(questionBody.getQuestion());
-//            logger.info("Determined category: {}", category);
-//            //연관된 카테고리 이름 여러개일 경우 split
-//            String[] categoryNames = category.split(",");
-//            Set<TagEntity> tagEntities = new HashSet<>();
-//            // 매칭된 키워드 목록 가져오기
-//            List<String> matchedKeywords = categoryService.getMatchedKeywords(questionBody.getQuestion());
-//
-//
-//            for (String categoryName : categoryNames) {
-//                String trimmedCategoryName = (categoryName == null || categoryName.trim().isEmpty()) ? "기타" : categoryName.trim();
-//
-//                // 카테고리 조회
-//                CategoryEntity categoryEntity = categoryRepository.findByName(trimmedCategoryName).orElse(null);
-//
-//                if (categoryEntity != null) {
-//                    questionEntity.setCategoryEntity(categoryEntity);
-//                    logger.info("Category assigned. Category: {}, Keywords:{}", categoryEntity.getName(), matchedKeywords);
-//                } else {
-//                    logger.warn("CategoryEntity is null. Saving as tag: {}", trimmedCategoryName);
-//                }
-//
-//                // 태그 조회 및 생성 (람다식 내에서 사용될 변수는 effectively final 이어야 함)
-//                TagEntity tagEntity = tagRepository.findByTag(trimmedCategoryName)
-//                        .orElseGet(() -> {
-//                            TagEntity newTag = new TagEntity();
-//                            newTag.setTag(trimmedCategoryName.replaceAll(" ", ""));
-//                            return tagRepository.save(newTag);
-//                        });
-//
-//                tagEntities.add(tagEntity);
-//                tagEntity.getQuestions().add(questionEntity);
-//            }
-//
-//            //매칭된 키워드가 있다면 이것도 태그로 저장
-//            tagEntities.addAll(keywordService.createTagsFromMatchedKeywords(matchedKeywords, questionEntity));
-//
-//            questionEntity.setTags(tagEntities);
-//            QuestionEntity savedQuestion = questionRepository.save(questionEntity);
-//
-//            QuestionDTO questionDTO = QuestionMapper.INSTANCE.questionEntityToQuestionDTO(savedQuestion);
-//
-//
-//            return String.format("Question is created: %s, Category: %s, Keyword : %s, Tags: %s",
-//                    questionDTO.getQuestion(),
-//                    questionDTO.getCategoryName(),
-//                    categoryService.getMatchedKeywords(questionDTO.getQuestion()),
-//                    String.join(", ", categoryNames));
-//        }
-//        return result.toString();
-//    }
 }
