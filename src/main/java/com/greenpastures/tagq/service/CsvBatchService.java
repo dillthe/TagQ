@@ -37,10 +37,10 @@ public class CsvBatchService {
         Set<String> questions = new HashSet<>();
         Path path = Paths.get(SENT_QUESTIONS_FILE);
 
-        if (Files.exists(path)) { // 파일이 존재할 때만 읽기
+        if (Files.exists(path)) {
             try (Stream<String> lines = Files.lines(path, StandardCharsets.UTF_8)) {
                 lines.map(String::trim)
-                        .filter(line -> !line.isEmpty()) // 빈 줄 제거
+                        .filter(line -> !line.isEmpty())
                         .forEach(questions::add);
             } catch (IOException e) {
                 log.error("파일을 읽는 중 오류 발생", e);
@@ -51,6 +51,7 @@ public class CsvBatchService {
     }
 
 
+    //질문기록 초기화 할 때 사용
     public void resetSentQuestions() {
         sentQuestions.clear(); // Set 초기화
         try {
@@ -70,7 +71,7 @@ public class CsvBatchService {
             // 기존 파일에서 읽어온 데이터와 현재 `sentQuestions` 차이를 구함
             Set<String> existingQuestions = loadSentQuestionsFromFile();
             Set<String> newQuestions = sentQuestions.stream()
-                    .filter(q -> !existingQuestions.contains(q)) // 기존에 없는 질문만 필터링
+                    .filter(q -> !existingQuestions.contains(q))
                     .collect(Collectors.toSet());
 
             if (!newQuestions.isEmpty()) {
