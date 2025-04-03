@@ -130,7 +130,6 @@ public class CsvBatchService {
         int successCount = 0;
         List<List<Map<String, String>>> failedBatches = new ArrayList<>();
 
-        // 10개씩 끊어서 처리
         for (int i = 0; i < questions.size(); i += batchSize) {
             int batchEnd = Math.min(i + batchSize, questions.size());
             List<Map<String, String>> batch = questions.subList(i, batchEnd);
@@ -166,12 +165,7 @@ public class CsvBatchService {
         }
 
         log.info("총 {}개 질문이 성공적으로 추가됨", successCount);
-
-        // 실패한 배치 재시도 (선택적으로 구현)
-        if (!failedBatches.isEmpty()) {
-            log.warn("처리되지 않은 배치가 있습니다: {}", failedBatches.size());
-            // 재시도 로직 추가
-        }
+        log.warn("처리되지 않은 배치가 있습니다: {}", failedBatches.size());
     }
 
     // 응답 본문에서 실제 추가된 개수 추출
@@ -184,7 +178,7 @@ public class CsvBatchService {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             List<?> responseList = objectMapper.readValue(responseBody, List.class);
-            return responseList.size();  // 리스트 크기를 반환
+            return responseList.size();
         } catch (Exception e) {
             log.error("응답 본문 파싱 중 오류 발생", e);
             return 0;
