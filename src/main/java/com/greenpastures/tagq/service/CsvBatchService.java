@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -27,7 +28,8 @@ import java.util.stream.Stream;
 public class CsvBatchService {
     private static final String API_URL = "http://localhost:8080/api/questions/batch";
     private static final int BATCH_SIZE = 100; // 한 번에 보낼 데이터 개수
-    private static final String SENT_QUESTIONS_FILE = "sent_questions.txt";
+
+ private static final String SENT_QUESTIONS_FILE = "sent_questions.txt";
 
     // 이미 전송된 질문을 추적하기 위한 Set (Thread-safe 버전으로 변경)
     private final Set<String> sentQuestions = new HashSet<>(loadSentQuestionsFromFile());
@@ -53,9 +55,9 @@ public class CsvBatchService {
 
     //질문기록 초기화 할 때 사용
     public void resetSentQuestions() {
-        sentQuestions.clear(); // Set 초기화
+        sentQuestions.clear();
         try {
-            Files.deleteIfExists(Paths.get(SENT_QUESTIONS_FILE)); // 파일 삭제
+            Files.deleteIfExists(Paths.get(SENT_QUESTIONS_FILE));
             log.info("기존 sent_questions.txt 삭제 완료. 새로운 질문을 전송합니다.");
         } catch (IOException e) {
             log.error("sent_questions.txt 삭제 중 오류 발생", e);
