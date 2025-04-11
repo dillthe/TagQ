@@ -6,10 +6,16 @@ spring:
       matching-strategy: ant_path_matcher
 
     datasource:
-      driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://localhost:3306/tagQ?useUnicode=true&characterEncoding=UTF-8
-      username: root
+#      driver-class-name: com.mysql.cj.jdbc.Driver
+#      url: jdbc:mysql://localhost:3306/tagQ?useUnicode=true&characterEncoding=UTF-8
+#      username: root
+#      password: 8282
+
+      url: jdbc:postgresql://localhost:5432/tagq
+      username: postgres
       password: 8282
+      driver-class-name: org.postgresql.Driver
+
 openai:
   api:
     key: ${OPENAI_API_KEY}
